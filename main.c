@@ -11,6 +11,8 @@ int main()
 
     Print_World_Cities_Tree(worldCities_tree);
 
+    printf("\n\nTotal cidades: %d\n\n", total);
+
 
 
 

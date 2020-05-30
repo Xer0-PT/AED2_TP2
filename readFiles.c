@@ -12,15 +12,12 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
     char auxIso3[100];
  */
 
-    int teste;
-
     char line[256];
     char word[100];
 
     int lineIndex;
     int wordIndex;
     int column;
-    int total = 0;
 
     file = fopen(FILE_WORLD_CITIES, "r");
 
@@ -46,7 +43,7 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
 
             switch (column)
             {
-                case 2  :   
+                case 2  :                    
                     tempData.city =     (char*) malloc(strlen(word)*sizeof(char) + 1);
                     strcpy(tempData.city, word);
                 break;
@@ -62,34 +59,23 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
             }
             lineIndex++;
             column++;
-        }
+        }        
 
-        total++;
-        WorldCities_to_Tree(tempTree, tempData);
+        if (strcmp(tempData.iso3, "PRT") == 0 || strcmp(tempData.iso3, "ESP") == 0)
+        {
+            /* printf("\nCity: %s", tempData.city);
+            printf("\nIso3: %s", tempData.iso3);
+            printf("\nPop: %d", tempData.population);
+            printf("\nId: %d", tempData.id);
+            puts(""); */
+
+            tempTree = WorldCities_to_Tree(tempTree, tempData);
+            ++*ptrTotalCities;
+        }
         
     }
     
-
-/* 
-    while (fscanf(file, "%s,%s,%d,%d,%s,%s,%s,%s,%s,%d,%d", charTrash, auxCity, &intTrash, &intTrash, charTrash, charTrash, auxIso3, charTrash, charTrash, &tempData.population, &tempData.id) != EOF)
-    {
-        if (strcmp(auxIso3, "PTR") == 0 || strcmp(auxIso3, "ESP") == 0)
-        {
-            ++total;
-
-            tempData.city = (char*) malloc(strlen(auxCity) * sizeof(char) + 1);
-            tempData.iso3 = (char*) malloc(strlen(auxIso3) * sizeof(char) + 1);
-
-            strcpy(tempData.city, auxCity);
-            strcpy(tempData.iso3, auxIso3);
-
-            tempTree = WorldCities_to_Tree(tempTree, tempData);
-        }
-    }
- */
     fclose(file);
-
-    *ptrTotalCities = total;
     
     return tempTree;
 }
@@ -128,10 +114,10 @@ void Print_World_Cities_Tree(Tree_WorldCities *tree)
 {
     if (tree)
     {
-        Print_World_Cities_Tree(tree->right);
+        Print_World_Cities_Tree(tree->left);
 
         printf("\nID: %d\tCity: %s\tISO3: %s\tPopulation: %d", tree->data.id, tree->data.city, tree->data.iso3, tree->data.population);
         
-        Print_World_Cities_Tree(tree->left);
-    }
+        Print_World_Cities_Tree(tree->right);
+    }    
 }
