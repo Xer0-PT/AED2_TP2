@@ -21,7 +21,6 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
     int column;
     int total = 0;
 
-
     file = fopen(FILE_WORLD_CITIES, "r");
 
     rewind(file);
@@ -46,9 +45,15 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
 
             switch (column)
             {
-                case 2  :   strcpy(tempData.city, word);        break;
+                case 2  :   
+                    tempData.city =     (char*) malloc(strlen(word)*sizeof(char) + 1);
+                    strcpy(tempData.city, word);
+                break;
                 
-                case 7  :   strcpy(tempData.iso3, word);        break;
+                case 7  :
+                    tempData.iso3 =     (char*) malloc(strlen(word)*sizeof(char) + 1);
+                    strcpy(tempData.iso3, word);
+                break;
 
                 case 10 :   tempData.population = atoi(word);   break;
 
