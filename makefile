@@ -9,6 +9,8 @@ main.o: main.c
 readFiles.o:
 	gcc -g -o readFiles.o readFiles.c -c -W -Wall -ansi -pedantic
 
+
+
 clean:
 	rm -rf *.o
 	#del /Q /S *.o *~ math

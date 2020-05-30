@@ -43,7 +43,8 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
 
             switch (column)
             {
-                case 2  :                    
+                case 2  :
+                    Small_Letters(word);
                     tempData.city =     (char*) malloc(strlen(word)*sizeof(char) + 1);
                     strcpy(tempData.city, word);
                 break;
@@ -74,7 +75,7 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
         }
         
     }
-    
+
     fclose(file);
     
     return tempTree;
@@ -121,3 +122,21 @@ void Print_World_Cities_Tree(Tree_WorldCities *tree)
         Print_World_Cities_Tree(tree->right);
     }    
 }
+
+/*! Função para colocar as palavras em minusculas */
+void Small_Letters(char *word)
+{
+    char aux;
+    int i = 0;
+
+    while (word[i] != '\0')
+    {
+        aux = word[i];
+        if (aux >= 'A' && aux <= 'Z')
+        {
+            word[i] = word[i] + 32;
+        }
+        i++;
+    }
+}
+

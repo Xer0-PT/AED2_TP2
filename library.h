@@ -41,5 +41,6 @@ typedef struct _World_Cities_Tree
 Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTotalCities);
 Tree_WorldCities *WorldCities_to_Tree(Tree_WorldCities *tree, Data_WorldCities tempData);
 void Print_World_Cities_Tree(Tree_WorldCities *tree);
+void Small_Letters(char *word);
 
 #endif
