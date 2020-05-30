@@ -12,6 +12,7 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
     char auxIso3[100];
  */
 
+    int teste;
 
     char line[256];
     char word[100];
