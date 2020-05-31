@@ -4,16 +4,18 @@ int main()
 {
     Tree_WorldCities *worldCities_tree = NULL;
 
-    int total = 0;
-    int *ptrTotal = &total;
-
     char searchCity[100];
+
+
     int opMenu;
-    int *ptrTotal = &total; 
+    int cityCount = 0;
+    int *ptrCityCount = &cityCount;
 
-    worldCities_tree = Read_World_Cities_File(worldCities_tree, ptrTotal);
+    worldCities_tree = Read_World_Cities_File(worldCities_tree);
 
-    Print_World_Cities_Tree(worldCities_tree);
+    /* Print_World_Cities_Tree(worldCities_tree); */
+
+    
      do
     {
         puts("");
@@ -28,22 +30,36 @@ int main()
         scanf("%d", &opMenu);
         switch (opMenu)
         {
-        case 1:
+            case 1:
+                printf("Indique a Cidade (em Ingles): ");
+                scanf("%s", searchCity);
+
+                Small_Letters(searchCity);
+
+                printf("\n%s", searchCity);
+
+                SearchCity(worldCities_tree, searchCity, ptrCityCount);
+
+                printf("\nExiste um total de %d cidades com esse nome.", cityCount);
             break;
-        
-        default:
-            printf("Opcao Invalida!");
+
+            case 2:
+
+
+
             break;
+            
+            case 0:
+                
+            break;
+
+            default:
+                printf("Opcao Invalida!");
+            break;
+
         }
-    } while (opMenu =! 0);
+    } while (opMenu != 0);
 
-    printf("\n\nTotal cidades: %d\n\n", total);
-
-    
-    printf("Indique a Cidade (em Ingles): ");
-    scanf("%s", searchCity);
-
-    Small_Letters(searchCity);
 
 
 

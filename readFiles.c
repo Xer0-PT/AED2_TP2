@@ -1,16 +1,9 @@
 #include "library.h"
 
-Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTotalCities)
+Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree)
 {
     FILE *file;
     Data_WorldCities tempData;
-
-/* 
-    int intTrash;
-    char charTrash[100];
-    char auxCity[100];
-    char auxIso3[100];
- */
 
     char line[256];
     char word[100];
@@ -62,17 +55,18 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree, int *ptrTot
             column++;
         }        
 
-        if (strcmp(tempData.iso3, "PRT") == 0 || strcmp(tempData.iso3, "ESP") == 0)
+/*         if (strcmp(tempData.iso3, "PRT") == 0 || strcmp(tempData.iso3, "ESP") == 0)
         {
-            /* printf("\nCity: %s", tempData.city);
+            printf("\nCity: %s", tempData.city);
             printf("\nIso3: %s", tempData.iso3);
             printf("\nPop: %d", tempData.population);
             printf("\nId: %d", tempData.id);
-            puts(""); */
+            puts("");
 
-            tempTree = WorldCities_to_Tree(tempTree, tempData);
-            ++*ptrTotalCities;
-        }
+             tempTree = WorldCities_to_Tree(tempTree, tempData); 
+        } */
+
+        tempTree = WorldCities_to_Tree(tempTree, tempData);
         
     }
 
@@ -86,11 +80,14 @@ Tree_WorldCities *WorldCities_to_Tree(Tree_WorldCities *tree, Data_WorldCities t
 {
     if (tree)
     {
-        if (tempData.id < tree->data.id)
+        if(strcmp(tree->data.city, tempData.city) < 0)
             tree->left = WorldCities_to_Tree(tree->left, tempData);
 
-        if (tempData.id > tree->data.id)
+        if(strcmp(tree->data.city, tempData.city) > 0)
             tree->right = WorldCities_to_Tree(tree->right, tempData);
+
+        if (strcmp(tree->data.city, tempData.city) == 0)
+            tree->right = WorldCities_to_Tree(tree->right, tempData);        
     }
     else
     {
@@ -140,3 +137,124 @@ void Small_Letters(char *word)
     }
 }
 
+Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree)
+{
+    FILE *file;
+
+    int auxIdOrigin;
+    int auxIdDestination;
+    float auxCost;
+
+
+    char line[256];
+    char word[100];
+
+    int lineIndex;
+    int wordIndex;
+    int column;
+
+    file = fopen(FILE_CIDADES_IBERIA, "r");
+
+    rewind(file);
+
+    while (fgets(line, sizeof(line), file))
+    {
+        lineIndex = 0;
+        column = 1;
+
+        while (line[lineIndex] != 44 && line[lineIndex] != 13 && line[lineIndex] != 10)
+        {
+            wordIndex = 0;
+            
+            while (line[lineIndex] != 44 && line[lineIndex] != 13 && line[lineIndex] != 10)
+            {
+                word[wordIndex] = line[lineIndex];
+                lineIndex++;
+                wordIndex++;
+            }
+            
+            word[wordIndex] = 0;
+
+            switch (column)
+            {
+                case 1  :   auxIdOrigin = atoi(word);       break;
+
+                case 3  :   auxIdDestination = atoi(word);  break;
+
+                case 5  :   auxCost = atof(word);           break;
+            }
+            lineIndex++;
+            column++;
+        }        
+
+        tempTree = IberiaCities_to_Tree(tempTree, auxIdOrigin, auxIdDestination, auxCost);   
+    }
+
+    fclose(file);
+    
+    return tempTree;
+}
+
+/*!Insere o ficheiro na Arvore */
+Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, int auxIdOrigin, int auxIdDestination, float auxCost)
+{
+    if (tree)
+    {
+        if(tree->idOrigin < auxIdOrigin)       
+            IberiaCities_to_Tree(tree->left, auxIdOrigin, auxIdDestination, auxCost);
+        
+        if(tree->idOrigin > auxIdOrigin)       
+            IberiaCities_to_Tree(tree->right, auxIdOrigin, auxIdDestination, auxCost);
+
+        if(tree->idOrigin == auxIdOrigin)
+            tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost);
+    }
+    else
+    {
+        tree = (Iberia_Cities*) malloc(sizeof(Iberia_Cities));
+
+        tree->idOrigin = auxIdOrigin;
+        tree->countDestinations++;
+        tree->treeDestination.idDestination = auxIdDestination;
+        tree->treeDestination.cost = auxCost;
+
+
+        tree->treeDestination.left = tree->treeDestination.right = NULL;
+        tree->left = tree->right       =   NULL;
+    }
+    return tree;
+}
+
+Destination_Tree *AddDestinations(Destination_Tree *tree, int auxIdDestination, float auxCost)
+{
+    if (tree)
+    {
+        if(tree->idDestination < auxIdDestination)       
+            AddDestinations(tree->left, auxIdDestination, auxCost);
+        
+        if(tree->idDestination > auxIdDestination)      
+            AddDestinations(tree->right, auxIdDestination, auxCost);
+
+        if(tree->idDestination == auxIdDestination)
+        {
+            if (auxCost < tree->cost)
+            {
+                tree->cost = auxCost;
+            }
+        }
+    }
+    else
+    {
+        tree = (Destination_Tree*) malloc(sizeof(Iberia_Cities));
+
+        tree->idOrigin = auxIdOrigin;
+        tree->countDestinations++;
+        tree->treeDestination.idDestination = auxIdDestination;
+        tree->treeDestination.cost = auxCost;
+
+
+        tree->treeDestination.left = tree->treeDestination.right = NULL;
+        tree->left = tree->right       =   NULL;
+    }
+    return tree;
+}
