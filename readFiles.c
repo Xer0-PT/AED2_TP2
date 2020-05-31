@@ -143,7 +143,7 @@ Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree)
 
     int auxIdOrigin;
     int auxIdDestination;
-    float auxCost;
+    float auxCost=0;
 
 
     char line[256];
@@ -153,7 +153,7 @@ Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree)
     int wordIndex;
     int column;
 
-    file = fopen(FILE_CIDADES_IBERIA, "r");
+    file = fopen(FILE_CIDADES_PT, "r");
 
     rewind(file);
 
@@ -172,7 +172,6 @@ Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree)
                 lineIndex++;
                 wordIndex++;
             }
-            
             word[wordIndex] = 0;
 
             switch (column)
@@ -181,11 +180,13 @@ Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree)
 
                 case 3  :   auxIdDestination = atoi(word);  break;
 
-                case 5  :   auxCost = atof(word);           break;
+                case 5  :   auxCost = strtod(word, NULL);      printf("\n%f", auxCost);     break;
             }
             lineIndex++;
             column++;
         }        
+
+        printf("\n%f", auxCost);
 
         tempTree = IberiaCities_to_Tree(tempTree, auxIdOrigin, auxIdDestination, auxCost);   
     }
@@ -215,12 +216,10 @@ Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, int auxIdOrigin, int au
 
         tree->idOrigin = auxIdOrigin;
         tree->countDestinations++;
-        tree->treeDestination.idDestination = auxIdDestination;
-        tree->treeDestination.cost = auxCost;
 
-
-        tree->treeDestination.left = tree->treeDestination.right = NULL;
         tree->left = tree->right       =   NULL;
+
+        tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost);
     }
     return tree;
 }
@@ -246,15 +245,36 @@ Destination_Tree *AddDestinations(Destination_Tree *tree, int auxIdDestination, 
     else
     {
         tree = (Destination_Tree*) malloc(sizeof(Iberia_Cities));
+        
+        tree->idDestination = auxIdDestination;
+        tree->cost = auxCost;
 
-        tree->idOrigin = auxIdOrigin;
-        tree->countDestinations++;
-        tree->treeDestination.idDestination = auxIdDestination;
-        tree->treeDestination.cost = auxCost;
-
-
-        tree->treeDestination.left = tree->treeDestination.right = NULL;
-        tree->left = tree->right       =   NULL;
+        tree->left = tree->right = NULL;
     }
     return tree;
+}
+
+void Print_Iberia_Cities_Tree(Iberia_Cities *tree)
+{
+    if (tree)
+    {
+        Print_Iberia_Cities_Tree(tree->left);
+
+        printf("\nID: %d\tDestinos: %d", tree->idOrigin, tree->countDestinations);
+        Print_Destinations_Tree(tree->treeDestination);
+        
+        Print_Iberia_Cities_Tree(tree->right);
+    }    
+}
+
+void Print_Destinations_Tree(Destination_Tree *tree)
+{
+    if (tree)
+    {
+        Print_Destinations_Tree(tree->left);
+
+        printf("\n\t\tID: %d\tCusto: %f", tree->idDestination, tree->cost);
+        
+        Print_Destinations_Tree(tree->right);
+    }    
 }

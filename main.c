@@ -3,6 +3,7 @@
 int main()
 {
     Tree_WorldCities *worldCities_tree = NULL;
+    Iberia_Cities *iberiaCities_tree = NULL;
 
     char searchCity[100];
 
@@ -12,8 +13,12 @@ int main()
     int *ptrCityCount = &cityCount;
 
     worldCities_tree = Read_World_Cities_File(worldCities_tree);
-
     /* Print_World_Cities_Tree(worldCities_tree); */
+
+    puts("1");
+
+    iberiaCities_tree = Read_Iberia_Cities_File(iberiaCities_tree);
+    Print_Iberia_Cities_Tree(iberiaCities_tree);
 
     
      do

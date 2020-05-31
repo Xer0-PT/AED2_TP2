@@ -12,6 +12,8 @@
 #define FILE_WORLD_CITIES "../CITIES/BIG/worldcities.csv"
 #define FILE_CIDADES_IBERIA "../CITIES/BIG/cidadesiberia.txt"
 
+#define FILE_CIDADES_PT "../CITIES/small/cidadesPT.txt"
+
 /*! Data Structures */
 
 typedef struct _Destination_Tree
@@ -36,7 +38,7 @@ typedef struct _Iberia_Cities_Data
     int idOrigin;
     int countDestinations;
 
-    Destination_Tree treeDestination;
+    Destination_Tree *treeDestination;
 
     struct _Iberia_Cities_Data *left, *right;
 
@@ -61,6 +63,12 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree);
 Tree_WorldCities *WorldCities_to_Tree(Tree_WorldCities *tree, Data_WorldCities tempData);
 void Print_World_Cities_Tree(Tree_WorldCities *tree);
 void Small_Letters(char *word);
+
+Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree);
+Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, int auxIdOrigin, int auxIdDestination, float auxCost);
+Destination_Tree *AddDestinations(Destination_Tree *tree, int auxIdDestination, float auxCost);
+void Print_Iberia_Cities_Tree(Iberia_Cities *tree);
+void Print_Destinations_Tree(Destination_Tree *tree);
 
 /*! csvFunctions */
 void SearchCity(Tree_WorldCities *tree, char *word, int *ptrCityCount);
