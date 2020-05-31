@@ -16,7 +16,7 @@ void SearchCity(Tree_WorldCities *tree, char *word, int *ptrCityCount)
         if(strcmp(tree->data.city, word) == 0)
         {
             ++*ptrCityCount;
-            printf("\n\tID: %d", tree->data.id);
+            printf("\n\tID: %lu", tree->data.id);
             SearchCity(tree->right, word, ptrCityCount);
         }
     }

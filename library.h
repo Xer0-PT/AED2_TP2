@@ -18,7 +18,7 @@
 
 typedef struct _Destination_Tree
 {
-    int idDestination;
+    unsigned long int idDestination;
     float cost;
     struct _Destination_Tree *left, *right;
 
@@ -26,8 +26,8 @@ typedef struct _Destination_Tree
 
 typedef struct _World_Cities_Data
 {
-    int id;
-    int population;
+    unsigned long int id;
+    unsigned long int population;
 
     char *city;
     char *iso3;
@@ -35,7 +35,7 @@ typedef struct _World_Cities_Data
 
 typedef struct _Iberia_Cities_Data
 {
-    int idOrigin;
+    unsigned long int idOrigin;
     int countDestinations;
 
     Destination_Tree *treeDestination;
@@ -65,8 +65,8 @@ void Print_World_Cities_Tree(Tree_WorldCities *tree);
 void Small_Letters(char *word);
 
 Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree);
-Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, int auxIdOrigin, int auxIdDestination, float auxCost);
-Destination_Tree *AddDestinations(Destination_Tree *tree, int auxIdDestination, float auxCost);
+Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, unsigned long int auxIdOrigin, unsigned long int auxIdDestination, float auxCost);
+Destination_Tree *AddDestinations(Destination_Tree *tree, unsigned long int auxIdDestination, float auxCost);
 void Print_Iberia_Cities_Tree(Iberia_Cities *tree);
 void Print_Destinations_Tree(Destination_Tree *tree);
 
