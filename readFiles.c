@@ -47,9 +47,9 @@ Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree)
                     strcpy(tempData.iso3, word);
                 break;
 
-                case 10 :   tempData.population = atoll(word);   break;
+                case 10 :   tempData.population = atol(word);   break;
 
-                case 11 :   tempData.id = atoll(word);           break;
+                case 11 :   tempData.id = atol(word);           break;
             }
             lineIndex++;
             column++;
@@ -179,9 +179,9 @@ Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree)
 
             switch (column)
             {
-                case 1  :   auxIdOrigin = atoll(word);      break;
+                case 1  :   auxIdOrigin = atol(word);      break;
 
-                case 3  :   auxIdDestination = atoll(word); break;
+                case 3  :   auxIdDestination = atol(word); break;
 
                 case 5  :   auxCost = atof(word);           break;
             }
@@ -213,6 +213,7 @@ Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, unsigned long int auxId
         {
             tree->countDestinations++;
             tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost);
+            /* tree = AddDestinations(tree, tree->treeDestination, auxIdDestination, auxCost); */
         }
     }
     else
@@ -225,11 +226,12 @@ Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, unsigned long int auxId
         tree->left = tree->right       =   NULL;
 
         tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost);
+        /* tree = AddDestinations(tree, tree->treeDestination, auxIdDestination, auxCost); */
     }
     return tree;
 }
 
-Destination_Tree *AddDestinations(Destination_Tree *tree, unsigned long int auxIdDestination, float auxCost)
+/* Destination_Tree *AddDestinations(Destination_Tree *tree, unsigned long int auxIdDestination, float auxCost)
 {
     if (tree)
     {
@@ -249,13 +251,76 @@ Destination_Tree *AddDestinations(Destination_Tree *tree, unsigned long int auxI
     }
     else
     {
-        tree = (Destination_Tree*) malloc(sizeof(Iberia_Cities));
+        tree = (Destination_Tree*) malloc(sizeof(Destination_Tree));
         
         tree->idDestination = auxIdDestination;
         tree->cost = auxCost;
 
         tree->left = tree->right = NULL;
     }
+    return tree;
+} */
+
+
+/* Iberia_Cities *AddDestinations(Iberia_Cities *tree, Destination_Tree *treeDestination, unsigned long int auxIdDestination, float auxCost)
+{
+    if (tree->treeDestination)
+    {
+        if(auxIdDestination < tree->treeDestination->idDestination)       
+            AddDestinations(tree, tree->treeDestination->left, auxIdDestination, auxCost);
+        
+        if(auxIdDestination > tree->treeDestination->idDestination)      
+            AddDestinations(tree, tree->treeDestination->right, auxIdDestination, auxCost);
+
+        if(auxIdDestination == tree->treeDestination->idDestination)
+        {
+            if (auxCost < tree->treeDestination->cost)
+            {
+                tree->treeDestination->cost = auxCost;
+            }
+        }
+    }
+    else
+    {
+        tree->treeDestination = (Destination_Tree*) malloc(sizeof(Destination_Tree));
+        
+        tree->treeDestination->idDestination = auxIdDestination;
+        tree->treeDestination->cost = auxCost;
+
+        tree->treeDestination->left = tree->treeDestination->right = NULL;
+    }
+    return tree;
+} */
+
+Destination_Tree *AddDestinations(Destination_Tree **tree, unsigned long int auxIdDestination, float auxCost)
+{
+    if (*tree == NULL)
+    {
+        *tree = NewDestination(auxIdDestination, auxCost);
+        return *tree;
+    }
+
+    if(auxIdDestination < (*tree)->idDestination)       
+        return AddDestinations((*tree)->left, auxIdDestination, auxCost);
+    
+    if(auxIdDestination > (*tree)->idDestination)      
+        return AddDestinations((*tree)->right, auxIdDestination, auxCost);
+
+    if(auxIdDestination == (*tree)->idDestination)
+        if (auxCost < (*tree)->cost)
+            (*tree)->cost = auxCost;
+    
+    return *tree;
+}
+
+Destination_Tree *NewDestination(unsigned long int auxIdDestination, float auxCost)
+{
+    Destination_Tree *tree = (Destination_Tree*) malloc(sizeof(Destination_Tree));
+    memset(tree, 0, sizeof(*tree));
+        
+    tree->idDestination = auxIdDestination;
+    tree->cost = auxCost;
+
     return tree;
 }
 
