@@ -66,15 +66,9 @@ void Small_Letters(char *word);
 
 Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree);
 Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, unsigned long int auxIdOrigin, unsigned long int auxIdDestination, float auxCost);
-/* Destination_Tree *AddDestinations(Destination_Tree *tree, unsigned long int auxIdDestination, float auxCost); */
+Destination_Tree *AddDestinations(Destination_Tree *tree, unsigned long int auxIdDestination, float auxCost, int *ptrCount);
 void Print_Iberia_Cities_Tree(Iberia_Cities *tree);
 void Print_Destinations_Tree(Destination_Tree *tree);
-
-/* Iberia_Cities *AddDestinations(Iberia_Cities *tree, Destination_Tree *treeDestination, unsigned long int auxIdDestination, float auxCost); */
-
-
-Destination_Tree *AddDestinations(Destination_Tree **tree, unsigned long int auxIdDestination, float auxCost);
-Destination_Tree *NewDestination(unsigned long int auxIdDestination, float auxCost);
 
 /*! csvFunctions */
 void SearchCity(Tree_WorldCities *tree, char *word, int *ptrCityCount);
