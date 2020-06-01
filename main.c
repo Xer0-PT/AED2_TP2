@@ -24,7 +24,7 @@ int main()
     iberiaCities_tree = Read_Iberia_Cities_File(iberiaCities_tree);
 
     CalculateDestinations(iberiaCities_tree);
-    Print_Iberia_Cities_Tree(iberiaCities_tree);
+    /* Print_Iberia_Cities_Tree(iberiaCities_tree); */
 
     
      do
@@ -73,7 +73,7 @@ int main()
 
             case 3:
 
-
+                Search_50k(worldCities_tree, iberiaCities_tree);
 
             break;
             

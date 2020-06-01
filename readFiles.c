@@ -55,18 +55,12 @@ Tree_World_Cities *Read_World_Cities_File(Tree_World_Cities *tempTree)
             column++;
         }        
 
-/*         if (strcmp(tempData.iso3, "PRT") == 0 || strcmp(tempData.iso3, "ESP") == 0)
+        if (strcmp(tempData.iso3, "PRT") == 0 || strcmp(tempData.iso3, "ESP") == 0)
         {
-            printf("\nCity: %s", tempData.city);
-            printf("\nIso3: %s", tempData.iso3);
-            printf("\nPop: %d", tempData.population);
-            printf("\nId: %d", tempData.id);
-            puts("");
+            tempTree = WorldCities_to_Tree(tempTree, tempData); 
+        }
 
-             tempTree = WorldCities_to_Tree(tempTree, tempData); 
-        } */
-
-        tempTree = WorldCities_to_Tree(tempTree, tempData);
+        /* tempTree = WorldCities_to_Tree(tempTree, tempData); */
         
     }
 
@@ -80,14 +74,20 @@ Tree_World_Cities *WorldCities_to_Tree(Tree_World_Cities *tree, Data_WorldCities
 {
     if (tree)
     {
-        if(strcmp(tree->data.city, tempData.city) < 0)
+        /* if(strcmp(tree->data.city, tempData.city) < 0)
             tree->left = WorldCities_to_Tree(tree->left, tempData);
 
         if(strcmp(tree->data.city, tempData.city) > 0)
             tree->right = WorldCities_to_Tree(tree->right, tempData);
 
         if (strcmp(tree->data.city, tempData.city) == 0)
-            tree->right = WorldCities_to_Tree(tree->right, tempData);        
+            tree->right = WorldCities_to_Tree(tree->right, tempData); */   
+
+        if(tempData.id < tree->data.id)
+            tree->left = WorldCities_to_Tree(tree->left, tempData);
+
+        if(tempData.id > tree->data.id)
+            tree->right = WorldCities_to_Tree(tree->right, tempData);
     }
     else
     {

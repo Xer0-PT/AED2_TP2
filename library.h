@@ -79,4 +79,10 @@ void SearchCity(Tree_World_Cities *tree, char *word, int *ptrCityCount);
 void CheckIfIDExists(Tree_Iberia_Cities *tree, unsigned long int id, int *ptrNumberOfDestinations);
 void ShowDestinations(Tree_Destination *tree);
 
+/*! Line 3 */
+void Search_50k(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree);
+void SearchOrigin(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree, unsigned long int id);
+void SearchDestinations(Tree_Destination *destinationTree, Tree_World_Cities *worldTree);
+void Search_30k(Tree_World_Cities *worldTree, unsigned long int id);
+
 #endif
