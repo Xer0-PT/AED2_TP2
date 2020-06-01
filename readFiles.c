@@ -268,7 +268,7 @@ void Print_Iberia_Cities_Tree(Tree_Iberia_Cities *tree)
         Print_Iberia_Cities_Tree(tree->left);
 
         printf("\nID: %lu\tDestinos: %d", tree->idOrigin, tree->countDestinations);
-        Print_Destinations_Tree(tree->treeDestination);
+        /* Print_Destinations_Tree(tree->treeDestination); */
         
         Print_Iberia_Cities_Tree(tree->right);
     }    

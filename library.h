@@ -85,4 +85,8 @@ void SearchOrigin(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree, 
 void SearchDestinations(Tree_Destination *destinationTree, Tree_World_Cities *worldTree);
 void Search_30k(Tree_World_Cities *worldTree, unsigned long int id);
 
+/*! Line 4 */
+void MostDestinations(Tree_Iberia_Cities *iberiaTree, int *ptrMostDestinations);
+void PrintMostDestinations(Tree_Iberia_Cities *iberiaTree, int mostDestinations);
+
 #endif

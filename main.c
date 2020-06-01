@@ -16,10 +16,11 @@ int main()
     int numberOfDestinations = -1;
     int *ptrNumberOfDestinations = &numberOfDestinations;
 
+    int countMostDestinations = -1;
+    int *ptrCountMostDestinations = &countMostDestinations;
+
     worldCities_tree = Read_World_Cities_File(worldCities_tree);
     /* Print_World_Cities_Tree(worldCities_tree); */
-
-    
 
     iberiaCities_tree = Read_Iberia_Cities_File(iberiaCities_tree);
 
@@ -73,7 +74,21 @@ int main()
 
             case 3:
 
+                /* Rever a forma como estamos a inserir a arvore das cidades do mundo
+                    Fazer com strcmp pelo nome da cidade ou pelo ID da cidade???
+                    Obtem-se resultados diferentes nesta alinea!!! */
+
                 Search_50k(worldCities_tree, iberiaCities_tree);
+
+            break;
+
+            case 4:
+
+                MostDestinations(iberiaCities_tree, ptrCountMostDestinations);
+                
+                printf("\n\nMaior numero de destinos: %d\n\n", countMostDestinations);
+
+                PrintMostDestinations(iberiaCities_tree, countMostDestinations);
 
             break;
             
@@ -87,11 +102,6 @@ int main()
 
         }
     } while (opMenu != 0);
-
-
-
-
-
 
     return 0;
 }

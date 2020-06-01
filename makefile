@@ -1,7 +1,7 @@
 all: exec
 
-exec: main.o readFiles.o line1.o line2.o line3.o
-	gcc -g -o exec main.o readFiles.o line1.o line2.o line3.o
+exec: main.o readFiles.o line1.o line2.o line3.o line4.o
+	gcc -g -o exec main.o readFiles.o line1.o line2.o line3.o line4.o
 
 main.o: main.c
 	gcc -g -o main.o main.c -c -W -Wall -ansi -pedantic
@@ -17,6 +17,9 @@ line2.o:
 
 line3.o:
 	gcc -g -o line3.o line3.c -c -W -Wall -ansi -pedantic
+
+line4.o:
+	gcc -g -o line4.o line4.c -c -W -Wall -ansi -pedantic
 
 clean:
 	rm -rf *.o
