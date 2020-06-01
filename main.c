@@ -2,8 +2,8 @@
 
 int main()
 {
-    Tree_WorldCities *worldCities_tree = NULL;
-    Iberia_Cities *iberiaCities_tree = NULL;
+    Tree_World_Cities *worldCities_tree = NULL;
+    Tree_Iberia_Cities *iberiaCities_tree = NULL;
 
     char searchCity[100];
 
@@ -11,6 +11,10 @@ int main()
     int opMenu;
     int cityCount = 0;
     int *ptrCityCount = &cityCount;
+    
+    unsigned long int searchID;
+    int numberOfDestinations = -1;
+    int *ptrNumberOfDestinations = &numberOfDestinations;
 
     worldCities_tree = Read_World_Cities_File(worldCities_tree);
     /* Print_World_Cities_Tree(worldCities_tree); */
@@ -18,6 +22,8 @@ int main()
     
 
     iberiaCities_tree = Read_Iberia_Cities_File(iberiaCities_tree);
+
+    CalculateDestinations(iberiaCities_tree);
     Print_Iberia_Cities_Tree(iberiaCities_tree);
 
     
@@ -49,6 +55,23 @@ int main()
             break;
 
             case 2:
+                printf("Indique o ID da cidade a procurar: ");
+                scanf("%lu", &searchID);
+
+                CheckIfIDExists(iberiaCities_tree, searchID, ptrNumberOfDestinations);
+
+                if (numberOfDestinations == -1)
+                {
+                    puts("ID nao existe!!");
+                }
+                else
+                {
+                    printf("\n\nEsta cidade tem %d destinos disponíveis.", numberOfDestinations);
+                }
+                
+            break;
+
+            case 3:
 
 
 

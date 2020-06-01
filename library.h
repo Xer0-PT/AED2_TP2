@@ -22,7 +22,7 @@ typedef struct _Destination_Tree
     float cost;
     struct _Destination_Tree *left, *right;
 
-}Destination_Tree;
+}Tree_Destination;
 
 typedef struct _World_Cities_Data
 {
@@ -33,22 +33,22 @@ typedef struct _World_Cities_Data
     char *iso3;
 }Data_WorldCities;
 
-typedef struct _Iberia_Cities_Data
+typedef struct _Iberia_Cities_Tree
 {
     unsigned long int idOrigin;
     int countDestinations;
 
-    Destination_Tree *treeDestination;
+    Tree_Destination *treeDestination;
 
-    struct _Iberia_Cities_Data *left, *right;
+    struct _Iberia_Cities_Tree *left, *right;
 
-}Iberia_Cities;
+}Tree_Iberia_Cities;
 
 typedef struct _World_Cities_Tree
 {
     Data_WorldCities data;
     struct _World_Cities_Tree *left, *right;
-}Tree_WorldCities;
+}Tree_World_Cities;
 
 
 
@@ -59,18 +59,24 @@ typedef struct _World_Cities_Tree
 
 
 /*! readFiles */
-Tree_WorldCities *Read_World_Cities_File(Tree_WorldCities *tempTree);
-Tree_WorldCities *WorldCities_to_Tree(Tree_WorldCities *tree, Data_WorldCities tempData);
-void Print_World_Cities_Tree(Tree_WorldCities *tree);
+Tree_World_Cities *Read_World_Cities_File(Tree_World_Cities *tempTree);
+Tree_World_Cities *WorldCities_to_Tree(Tree_World_Cities *tree, Data_WorldCities tempData);
+void Print_World_Cities_Tree(Tree_World_Cities *tree);
 void Small_Letters(char *word);
 
-Iberia_Cities *Read_Iberia_Cities_File(Iberia_Cities *tempTree);
-Iberia_Cities *IberiaCities_to_Tree(Iberia_Cities *tree, unsigned long int auxIdOrigin, unsigned long int auxIdDestination, float auxCost);
-Destination_Tree *AddDestinations(Destination_Tree *tree, unsigned long int auxIdDestination, float auxCost, int *ptrCount);
-void Print_Iberia_Cities_Tree(Iberia_Cities *tree);
-void Print_Destinations_Tree(Destination_Tree *tree);
+Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree);
+Tree_Iberia_Cities *IberiaCities_to_Tree(Tree_Iberia_Cities *tree, unsigned long int auxIdOrigin, unsigned long int auxIdDestination, float auxCost);
+Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxIdDestination, float auxCost, int *ptrCount);
+void Print_Iberia_Cities_Tree(Tree_Iberia_Cities *tree);
+void Print_Destinations_Tree(Tree_Destination *tree);
+void CalculateDestinations(Tree_Iberia_Cities *tree);
+int NumberOfDestinations(Tree_Destination *tree);
 
-/*! csvFunctions */
-void SearchCity(Tree_WorldCities *tree, char *word, int *ptrCityCount);
+/*! Line 1  */
+void SearchCity(Tree_World_Cities *tree, char *word, int *ptrCityCount);
+
+/*! Line 2 */
+void CheckIfIDExists(Tree_Iberia_Cities *tree, unsigned long int id, int *ptrNumberOfDestinations);
+void ShowDestinations(Tree_Destination *tree);
 
 #endif
