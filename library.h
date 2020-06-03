@@ -20,6 +20,11 @@ typedef struct _Destination_Tree
 {
     unsigned long int idDestination;
     float cost;
+
+
+    unsigned long int population;
+
+
     struct _Destination_Tree *left, *right;
 
 }Tree_Destination;
@@ -46,9 +51,22 @@ typedef struct _Iberia_Cities_Tree
 
 typedef struct _World_Cities_Tree
 {
+    int flag;
+    int flag2;
     Data_WorldCities data;
     struct _World_Cities_Tree *left, *right;
 }Tree_World_Cities;
+
+typedef struct _Line_3_Tree
+{
+    unsigned long int idOrigin;
+    unsigned long int originPopulation;
+
+    Tree_Destination *treeDestination;
+
+    struct _Line_3_Tree *left, *right;
+}Tree_Line_3;
+
 
 
 
@@ -66,7 +84,7 @@ void Small_Letters(char *word);
 
 Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree);
 Tree_Iberia_Cities *IberiaCities_to_Tree(Tree_Iberia_Cities *tree, unsigned long int auxIdOrigin, unsigned long int auxIdDestination, float auxCost);
-Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxIdDestination, float auxCost, int *ptrCount);
+Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxIdDestination, float auxCost);
 void Print_Iberia_Cities_Tree(Tree_Iberia_Cities *tree);
 void Print_Destinations_Tree(Tree_Destination *tree);
 void CalculateDestinations(Tree_Iberia_Cities *tree);
@@ -82,11 +100,18 @@ void ShowDestinations(Tree_Destination *tree);
 /*! Line 3 */
 void Search_50k(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree);
 void SearchOrigin(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree, unsigned long int id);
-void SearchDestinations(Tree_Destination *destinationTree, Tree_World_Cities *worldTree);
-void Search_30k(Tree_World_Cities *worldTree, unsigned long int id);
+void SearchDestinations(Tree_Destination *destinationTree, Tree_World_Cities *worldTree, char *city, unsigned long int population);
+void Search_30k(Tree_World_Cities *worldTree, unsigned long int id, char *city, unsigned long int population, Tree_Destination *destinationTree);
 
 /*! Line 4 */
 void MostDestinations(Tree_Iberia_Cities *iberiaTree, int *ptrMostDestinations);
 void PrintMostDestinations(Tree_Iberia_Cities *iberiaTree, int mostDestinations);
+
+
+/* Pop */
+/* void SearchOrigin(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree);
+void SearchDestinations(Tree_Destination *tree, Tree_World_Cities *worldTree, unsigned long int originID, unsigned long int originPopulation, char *city);
+void Search_50k(Tree_World_Cities *worldTree, unsigned long int idIberia, Tree_Iberia_Cities *iberiaTree);
+void Search_30k(unsigned long int idDestino, Tree_World_Cities *worldTree, unsigned long int originID, unsigned long int originPopulation, char *city); */
 
 #endif

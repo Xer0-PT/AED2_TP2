@@ -5,6 +5,8 @@ int main()
     Tree_World_Cities *worldCities_tree = NULL;
     Tree_Iberia_Cities *iberiaCities_tree = NULL;
 
+    Tree_Line_3 *line3_tree = NULL;
+
     char searchCity[100];
 
 
@@ -25,7 +27,9 @@ int main()
     iberiaCities_tree = Read_Iberia_Cities_File(iberiaCities_tree);
 
     CalculateDestinations(iberiaCities_tree);
-    /* Print_Iberia_Cities_Tree(iberiaCities_tree); */
+    
+    Print_Iberia_Cities_Tree(iberiaCities_tree);
+
 
     
      do
@@ -80,6 +84,11 @@ int main()
 
                 Search_50k(worldCities_tree, iberiaCities_tree);
 
+                /* SearchOrigin(worldCities_tree, iberiaCities_tree); */
+
+
+                
+
             break;
 
             case 4:
@@ -103,6 +112,7 @@ int main()
         }
     } while (opMenu != 0);
 
+
+
     return 0;
 }
-
