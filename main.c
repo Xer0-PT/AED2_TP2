@@ -5,7 +5,9 @@ int main()
     Tree_World_Cities *worldCities_tree = NULL;
     Tree_Iberia_Cities *iberiaCities_tree = NULL;
 
-    Tree_Line_3 *line3_tree = NULL;
+    data line3Data;
+
+    /* Tree_Line_3 *line3_tree = NULL; */
 
     char searchCity[100];
 
@@ -28,7 +30,9 @@ int main()
 
     CalculateDestinations(iberiaCities_tree);
     
-    Print_Iberia_Cities_Tree(iberiaCities_tree);
+    /* Print_Iberia_Cities_Tree(iberiaCities_tree, worldCities_tree); */
+
+
 
 
     
@@ -82,7 +86,7 @@ int main()
                     Fazer com strcmp pelo nome da cidade ou pelo ID da cidade???
                     Obtem-se resultados diferentes nesta alinea!!! */
 
-                Search_50k(worldCities_tree, iberiaCities_tree);
+                Search_Origin(iberiaCities_tree, worldCities_tree, line3Data);
 
                 /* SearchOrigin(worldCities_tree, iberiaCities_tree); */
 

@@ -1,5 +1,82 @@
 #include "library.h"
 
+void Search_Origin(Tree_Iberia_Cities *tree, Tree_World_Cities *worldTree, data line3Data)
+{
+    if (tree)
+    {
+            line3Data = Search_50k(worldTree, tree->idOrigin, line3Data);
+            
+            if (line3Data.population)
+            {
+                printf("\n\nID: %lu\tPopulation: %lu", line3Data.id, line3Data.population);
+                /* line3Data.population = 0;
+                line3Data.id = 0; */
+            }
+            Search_Destination(tree->treeDestination, worldTree, line3Data);
+
+        Search_Origin(tree->left, worldTree, line3Data);
+        Search_Origin(tree->right, worldTree, line3Data);
+    }    
+}
+
+void Search_Destination(Tree_Destination *tree, Tree_World_Cities *worldTree, data line3Data)
+{
+    if (tree)
+    {
+        Search_Destination(tree->left, worldTree, line3Data);
+
+           line3Data = Search_30k(worldTree, tree->idDestination, line3Data);
+           
+           if (line3Data.population)
+           {
+                printf("\n\t\tID: %lu\tPopulation: %lu", line3Data.id, line3Data.population);
+                line3Data.id = 0;
+                line3Data.population = 0;
+           }
+        
+        Search_Destination(tree->right, worldTree, line3Data);
+    }    
+}
+
+data Search_50k(Tree_World_Cities *worldTree, unsigned long int id, data line3Data)
+{
+    if (worldTree)
+    {
+        if (worldTree->data.id == id)
+        {
+            if (worldTree->data.population > 50000)
+            {
+                line3Data.id = id;
+                line3Data.population = worldTree->data.population;
+                return line3Data;
+            }
+        }
+
+        Search_50k(worldTree->left, id, line3Data);
+        Search_50k(worldTree->right, id, line3Data);
+    }
+}
+
+data Search_30k(Tree_World_Cities *worldTree, unsigned long int id, data line3Data)
+{
+    if (worldTree)
+    {
+        if (worldTree->data.id == id)
+        {
+            if (worldTree->data.population < 30000)
+            {
+                line3Data.id = id;
+                line3Data.population = worldTree->data.population;
+                return line3Data;
+            }
+        }
+
+        Search_30k(worldTree->left, id, line3Data);
+        Search_30k(worldTree->right, id, line3Data);
+    }
+}
+
+
 /* void SearchOrigin(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree)
 {
     if (iberiaTree)
@@ -69,7 +146,7 @@ void Search_30k(unsigned long int idDestino, Tree_World_Cities *worldTree, unsig
     }
 } */
 
-void Search_50k(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree)
+/* void Search_50k(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree)
 {
     if (worldTree)
     {
@@ -121,34 +198,12 @@ void Search_30k(Tree_World_Cities *worldTree, unsigned long int id, char *city, 
         {
             if (worldTree->data.id == id)
             {
-                /* puts("1"); */
-                if (worldTree->data.population < 30000)
-                {
-                    /* if (worldTree->flag == 0)
-                    {
-                        printf("\nCidade Origem: %s\tPopulacao: %lu", city, population);
-                        worldTree->flag ++;
-                    }
-                    
-                    printf("\n\t\tCidade Destino: %s\tPopulacao: %lu", worldTree->data.city, worldTree->data.population); */
-
-                    
-
-
-
-
-
-
-
-                }
-                /* puts("2"); */
-                /* SearchDestinations(destinationTree->right, worldTree, city, population); */
             }
 
             Search_30k(worldTree->left, id, city, population, destinationTree);
             Search_30k(worldTree->right, id, city, population, destinationTree);
         }   
-}
+} */
 
 /* void Search_30k(Tree_World_Cities *worldTree, Tree_Destination *destinationTree)
 {

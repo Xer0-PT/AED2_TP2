@@ -237,7 +237,7 @@ Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxI
     {
         if(auxIdDestination < tree->idDestination)       
             tree->left = AddDestinations(tree->left, auxIdDestination, auxCost);
-        
+
         if(auxIdDestination > tree->idDestination)      
             tree->right = AddDestinations(tree->right, auxIdDestination, auxCost);
 
@@ -261,30 +261,32 @@ Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxI
     return tree;
 }
 
-void Print_Iberia_Cities_Tree(Tree_Iberia_Cities *tree)
+/* void Print_Iberia_Cities_Tree(Tree_Iberia_Cities *tree, Tree_World_Cities *worldTree)
 {
     if (tree)
     {
-        Print_Iberia_Cities_Tree(tree->left);
+        Print_Iberia_Cities_Tree(tree->left, worldTree);
 
-        printf("\nID: %lu\tDestinos: %d", tree->idOrigin, tree->countDestinations);
-        Print_Destinations_Tree(tree->treeDestination);
-        
-        Print_Iberia_Cities_Tree(tree->right);
+        printf("\n\nID: %lu\tDestinos: %d", tree->idOrigin, tree->countDestinations);
+        Search_Population(worldTree, tree->idOrigin);
+        puts("");
+
+        Print_Destinations_Tree(tree->treeDestination, worldTree);
+        Print_Iberia_Cities_Tree(tree->right, worldTree);
     }    
 }
 
-void Print_Destinations_Tree(Tree_Destination *tree)
+void Print_Destinations_Tree(Tree_Destination *tree, Tree_World_Cities *worldTree)
 {
     if (tree)
     {
-        Print_Destinations_Tree(tree->left);
-
         printf("\n\t\tID: %lu\tCusto: %f", tree->idDestination, tree->cost);
-        
-        Print_Destinations_Tree(tree->right);
+        Search_Population(worldTree, tree->idDestination);
+
+        Print_Destinations_Tree(tree->left, worldTree);
+        Print_Destinations_Tree(tree->right, worldTree);
     }    
-}
+} */
 
 void CalculateDestinations(Tree_Iberia_Cities *tree)
 {
@@ -306,3 +308,18 @@ int NumberOfDestinations(Tree_Destination *tree)
     else     
         return(NumberOfDestinations(tree->left) + 1 + NumberOfDestinations(tree->right));   
 } 
+
+
+void Search_Population(Tree_World_Cities *worldTree, unsigned long int id)
+{
+    if (worldTree)
+    {
+        if (worldTree->data.id == id)
+        {
+            printf("\tPopulation: %lu", worldTree->data.population);
+        }
+
+        Search_Population(worldTree->left, id);
+        Search_Population(worldTree->right, id);
+    }
+}
