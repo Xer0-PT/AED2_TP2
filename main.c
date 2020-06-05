@@ -5,12 +5,7 @@ int main()
     Tree_World_Cities *worldCities_tree = NULL;
     Tree_Iberia_Cities *iberiaCities_tree = NULL;
 
-    data line3Data;
-
-    /* Tree_Line_3 *line3_tree = NULL; */
-
     char searchCity[100];
-
 
     int opMenu;
     int cityCount = 0;
@@ -24,17 +19,10 @@ int main()
     int *ptrCountMostDestinations = &countMostDestinations;
 
     worldCities_tree = Read_World_Cities_File(worldCities_tree);
-    /* Print_World_Cities_Tree(worldCities_tree); */
 
-    iberiaCities_tree = Read_Iberia_Cities_File(iberiaCities_tree);
+    iberiaCities_tree = Read_Iberia_Cities_File(iberiaCities_tree, worldCities_tree);
 
     CalculateDestinations(iberiaCities_tree);
-    
-    /* Print_Iberia_Cities_Tree(iberiaCities_tree, worldCities_tree); */
-
-
-
-
     
      do
     {
@@ -42,8 +30,8 @@ int main()
         puts("");
         puts("1 - Verificar cidades iguais");
         puts("2 - Verificar cidades para onde posso viajar");
-        puts("3 - Listar todas as cidades com mais de 50 000 habitantes");
-        puts("4 - Verificar caminho entre cidades");
+        puts("3 - Cidades com mais de 50 000 habitantes e destinos com menos de 30000");
+        puts("4 - Cidades com maior numero de destinos");
         puts("0 - Exit");
         puts("");
         printf("Opcao: ");
@@ -51,16 +39,16 @@ int main()
         switch (opMenu)
         {
             case 1:
-                printf("Indique a Cidade (em Ingles): ");
+                printf("Indique a Cidade: ");
                 scanf("%s", searchCity);
 
                 Small_Letters(searchCity);
 
-                printf("\n%s", searchCity);
-
                 SearchCity(worldCities_tree, searchCity, ptrCityCount);
 
                 printf("\nExiste um total de %d cidades com esse nome.", cityCount);
+
+                cityCount = 0;
             break;
 
             case 2:
@@ -81,28 +69,15 @@ int main()
             break;
 
             case 3:
-
-                /* Rever a forma como estamos a inserir a arvore das cidades do mundo
-                    Fazer com strcmp pelo nome da cidade ou pelo ID da cidade???
-                    Obtem-se resultados diferentes nesta alinea!!! */
-
-                Search_Origin(iberiaCities_tree, worldCities_tree, line3Data);
-
-                /* SearchOrigin(worldCities_tree, iberiaCities_tree); */
-
-
-                
-
+                Get_50k(iberiaCities_tree);
             break;
 
             case 4:
-
                 MostDestinations(iberiaCities_tree, ptrCountMostDestinations);
                 
                 printf("\n\nMaior numero de destinos: %d\n\n", countMostDestinations);
 
                 PrintMostDestinations(iberiaCities_tree, countMostDestinations);
-
             break;
             
             case 0:
@@ -115,8 +90,6 @@ int main()
 
         }
     } while (opMenu != 0);
-
-
 
     return 0;
 }

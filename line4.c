@@ -1,5 +1,6 @@
 #include "library.h"
 
+/*! Procedimento que procura qual o maior número de destinos, atribuindo esse valor à variável MostDestinations por apontador */
 void MostDestinations(Tree_Iberia_Cities *iberiaTree, int *ptrMostDestinations)
 {
     if (iberiaTree)
@@ -15,6 +16,7 @@ void MostDestinations(Tree_Iberia_Cities *iberiaTree, int *ptrMostDestinations)
     }
 }
 
+/*! Procedimento para imprimir as cidades com número de destinos igual ao atribuído à variável MostDestinations */
 void PrintMostDestinations(Tree_Iberia_Cities *iberiaTree, int mostDestinations)
 {
     if (iberiaTree)

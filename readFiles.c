@@ -1,5 +1,7 @@
 #include "library.h"
 
+/*! Função para ler o ficheiro WorldCities.csv  */
+/*! Decompondo cada linha em 11 colunas, ignorando a informação que não seja relevante */
 Tree_World_Cities *Read_World_Cities_File(Tree_World_Cities *tempTree)
 {
     FILE *file;
@@ -14,7 +16,7 @@ Tree_World_Cities *Read_World_Cities_File(Tree_World_Cities *tempTree)
 
     file = fopen(FILE_WORLD_CITIES, "r");
 
-    /* rewind(file); */
+    fgets(line, sizeof(line), file);
 
     while (fgets(line, sizeof(line), file))
     {
@@ -36,31 +38,28 @@ Tree_World_Cities *Read_World_Cities_File(Tree_World_Cities *tempTree)
 
             switch (column)
             {
+                /*! Decomposição da linha em coluna */
                 case 2  :
                     Small_Letters(word);
                     tempData.city =     (char*) malloc(strlen(word)*sizeof(char) + 1);
                     strcpy(tempData.city, word);
                 break;
-                
+
                 case 7  :
                     tempData.iso3 =     (char*) malloc(strlen(word)*sizeof(char) + 1);
                     strcpy(tempData.iso3, word);
                 break;
 
-                case 10 :   tempData.population = atol(word);   break;
+                case 10 :   tempData.population = atof(word);   break;
 
-                case 11 :   tempData.id = atol(word);           break;
+                case 11 :   tempData.id = atol(word);     break;
             }
             lineIndex++;
             column++;
         }        
-        /* if (strcmp(tempData.iso3, "PRT") == 0 || strcmp(tempData.iso3, "ESP") == 0) */
+        /*! Estamos a fazer a leitura do ficheiro cidadesPT.txt */
         if (strcmp(tempData.iso3, "PRT") == 0)
-        {
-            tempTree = WorldCities_to_Tree(tempTree, tempData); 
-        }
-
-        /* tempTree = WorldCities_to_Tree(tempTree, tempData); */
+            tempTree = WorldCities_to_Tree(tempTree, tempData);
     }
 
     fclose(file);
@@ -68,20 +67,11 @@ Tree_World_Cities *Read_World_Cities_File(Tree_World_Cities *tempTree)
     return tempTree;
 }
 
-/*!Insere o ficheiro na Arvore */
+/*! Insere os dados lidos na função anterior numa árvore de procura binária */
 Tree_World_Cities *WorldCities_to_Tree(Tree_World_Cities *tree, Data_WorldCities tempData)
 {
     if (tree)
     {
-        /* if(strcmp(tree->data.city, tempData.city) < 0)
-            tree->left = WorldCities_to_Tree(tree->left, tempData);
-
-        if(strcmp(tree->data.city, tempData.city) > 0)
-            tree->right = WorldCities_to_Tree(tree->right, tempData);
-
-        if (strcmp(tree->data.city, tempData.city) == 0)
-            tree->right = WorldCities_to_Tree(tree->right, tempData); */   
-
         if(tempData.id < tree->data.id)
             tree->left = WorldCities_to_Tree(tree->left, tempData);
 
@@ -101,25 +91,9 @@ Tree_World_Cities *WorldCities_to_Tree(Tree_World_Cities *tree, Data_WorldCities
         tree->data.id           =   tempData.id;
         tree->data.population   =   tempData.population;
 
-        tree->flag = 0;
-        tree->flag2 = 0;
-
         tree->left = tree->right       =   NULL;
     }
     return tree;
-}
-
-/*! Imprime a Arvore*/
-void Print_World_Cities_Tree(Tree_World_Cities *tree)
-{
-    if (tree)
-    {
-        Print_World_Cities_Tree(tree->left);
-
-        printf("\nID: %lu\tCity: %s\tISO3: %s\tPopulation: %lu", tree->data.id, tree->data.city, tree->data.iso3, tree->data.population);
-        
-        Print_World_Cities_Tree(tree->right);
-    }    
 }
 
 /*! Função para colocar as palavras em minusculas */
@@ -132,21 +106,21 @@ void Small_Letters(char *word)
     {
         aux = word[i];
         if (aux >= 'A' && aux <= 'Z')
-        {
             word[i] = word[i] + 32;
-        }
+
         i++;
     }
 }
 
-Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree)
+/*! Função para ler o ficheiro CidadesPT.txt  */
+/*! Decompondo cada linha em 5 colunas, ignorando a informação que não seja relevante */
+Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree, Tree_World_Cities *worldTree)
 {
     FILE *file;
 
     unsigned long int auxIdOrigin;
     unsigned long int auxIdDestination;
     float auxCost;
-
 
     char line[512];
     char word[256];
@@ -156,9 +130,6 @@ Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree)
     int column;
 
     file = fopen(FILE_CIDADES_PT, "r");
-    /* file = fopen(FILE_CIDADES_IBERIA, "r"); */
-
-    /* rewind(file); */
 
     while (fgets(line, sizeof(line), file))
     {
@@ -179,9 +150,9 @@ Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree)
             
             word[wordIndex] = 0;
 
-
             switch (column)
             {
+                /*! Decomposição da linha em coluna */
                 case 1  :   auxIdOrigin = atol(word);      break;
 
                 case 3  :   auxIdDestination = atol(word); break;
@@ -192,8 +163,7 @@ Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree)
             lineIndex++;
             column++;
         }        
-
-        tempTree = IberiaCities_to_Tree(tempTree, auxIdOrigin, auxIdDestination, auxCost);   
+        tempTree = IberiaCities_to_Tree(tempTree, auxIdOrigin, auxIdDestination, auxCost, worldTree);   
     }
 
     fclose(file);
@@ -201,21 +171,21 @@ Tree_Iberia_Cities *Read_Iberia_Cities_File(Tree_Iberia_Cities *tempTree)
     return tempTree;
 }
 
-/*!Insere o ficheiro na Arvore */
-Tree_Iberia_Cities *IberiaCities_to_Tree(Tree_Iberia_Cities *tree, unsigned long int auxIdOrigin, unsigned long int auxIdDestination, float auxCost)
+/*! Insere os dados lidos na função anterior numa árvore de procura binária */
+Tree_Iberia_Cities *IberiaCities_to_Tree(Tree_Iberia_Cities *tree, unsigned long int auxIdOrigin, unsigned long int auxIdDestination, float auxCost, Tree_World_Cities *worldTree)
 {
     if (tree)
     {
         if(auxIdOrigin < tree->idOrigin)       
-            tree->left = IberiaCities_to_Tree(tree->left, auxIdOrigin, auxIdDestination, auxCost);
+            tree->left = IberiaCities_to_Tree(tree->left, auxIdOrigin, auxIdDestination, auxCost, worldTree);
         
         if(auxIdOrigin > tree->idOrigin)       
-            tree->right = IberiaCities_to_Tree(tree->right, auxIdOrigin, auxIdDestination, auxCost);
+            tree->right = IberiaCities_to_Tree(tree->right, auxIdOrigin, auxIdDestination, auxCost, worldTree);
 
+        /*! Se o ID da cidade de origem for igual, então estamos perante outro destino, ou destino com menor/maior custo */
         if(auxIdOrigin == tree->idOrigin)
-        {
-            tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost);
-        }
+            /*! Chama a função para adicionar um destino à árvore de destinos que fica guardada em cada nodo da árvore de origem */
+            tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost, worldTree);
     }
     else
     {
@@ -224,29 +194,35 @@ Tree_Iberia_Cities *IberiaCities_to_Tree(Tree_Iberia_Cities *tree, unsigned long
         tree->idOrigin = auxIdOrigin;
         tree->countDestinations = 0;
 
+        /*! Chama a função que obtém a população desta cidade, ficando este valor já registado nesta árvore */
+        /*! Facilitando a procura de cidades com mais de 50 000 habitantes */
+        GetPopulation_Origin(worldTree, tree);
+
         tree->left = tree->right = NULL;
 
-        tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost);
+        /*! Chama a função para adicionar um destino à árvore de destinos que fica guardada em cada nodo da árvore de origem */
+        tree->treeDestination = AddDestinations(tree->treeDestination, auxIdDestination, auxCost, worldTree);
     }
     return tree;
 }
 
-Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxIdDestination, float auxCost)
+/*! Função para adicionar destinos à árvore de procura binária */
+Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxIdDestination, float auxCost, Tree_World_Cities *worldTree)
 {
     if (tree)
     {
         if(auxIdDestination < tree->idDestination)       
-            tree->left = AddDestinations(tree->left, auxIdDestination, auxCost);
+            tree->left = AddDestinations(tree->left, auxIdDestination, auxCost, worldTree);
 
         if(auxIdDestination > tree->idDestination)      
-            tree->right = AddDestinations(tree->right, auxIdDestination, auxCost);
+            tree->right = AddDestinations(tree->right, auxIdDestination, auxCost, worldTree);
 
+        /*! Se o destino for igual, então verificamos se o custo é menor */
+        /*! Se for menor, então fica só guardado esse custo */
         if(auxIdDestination == tree->idDestination)
         {
             if (auxCost < tree->cost)
-            {
                 tree->cost = auxCost;
-            }
         }
     }
     else
@@ -256,38 +232,48 @@ Tree_Destination *AddDestinations(Tree_Destination *tree, unsigned long int auxI
         tree->idDestination = auxIdDestination;
         tree->cost = auxCost;
 
+        /*! Chama a função que obtém a população desta cidade, ficando este valor já registado nesta árvore */
+        /*! Facilitando a procura de cidades com menos de 30 000 habitantes */
+        GetPopulation_Destination(worldTree, tree);
+
         tree->left = tree->right = NULL;
     }
     return tree;
 }
 
-/* void Print_Iberia_Cities_Tree(Tree_Iberia_Cities *tree, Tree_World_Cities *worldTree)
+/*! Procedimento para percorrer a árvore WorldCities à procura do ID da cidade origem para ficar já guardado o número de habitantes */
+void GetPopulation_Origin(Tree_World_Cities *worldTree, Tree_Iberia_Cities *iberiaTree)
 {
-    if (tree)
+    if (worldTree)
     {
-        Print_Iberia_Cities_Tree(tree->left, worldTree);
+        if (worldTree->data.id == iberiaTree->idOrigin)
+            iberiaTree->population = worldTree->data.population;
 
-        printf("\n\nID: %lu\tDestinos: %d", tree->idOrigin, tree->countDestinations);
-        Search_Population(worldTree, tree->idOrigin);
-        puts("");
+        if (iberiaTree->idOrigin < worldTree->data.id)
+            GetPopulation_Origin(worldTree->left, iberiaTree);
 
-        Print_Destinations_Tree(tree->treeDestination, worldTree);
-        Print_Iberia_Cities_Tree(tree->right, worldTree);
-    }    
+        if (iberiaTree->idOrigin > worldTree->data.id)
+            GetPopulation_Origin(worldTree->right, iberiaTree);
+    }
 }
 
-void Print_Destinations_Tree(Tree_Destination *tree, Tree_World_Cities *worldTree)
+/*! Procedimento para percorrer a árvore WorldCities à procura do ID da cidade destino para ficar já guardado o número de habitantes */
+void  GetPopulation_Destination(Tree_World_Cities *worldTree, Tree_Destination *destinationTree)
 {
-    if (tree)
+    if (worldTree)
     {
-        printf("\n\t\tID: %lu\tCusto: %f", tree->idDestination, tree->cost);
-        Search_Population(worldTree, tree->idDestination);
+        if (worldTree->data.id == destinationTree->idDestination)
+            destinationTree->population = worldTree->data.population;
 
-        Print_Destinations_Tree(tree->left, worldTree);
-        Print_Destinations_Tree(tree->right, worldTree);
-    }    
-} */
+        if (destinationTree->idDestination < worldTree->data.id)
+            GetPopulation_Destination(worldTree->left, destinationTree);
 
+        if (destinationTree->idDestination > worldTree->data.id)
+            GetPopulation_Destination(worldTree->right, destinationTree);
+    }
+}
+
+/*! Procedimento para chamar a função de calcular o número de destinos para cada cidade origem */
 void CalculateDestinations(Tree_Iberia_Cities *tree)
 {
     if (tree)
@@ -300,6 +286,8 @@ void CalculateDestinations(Tree_Iberia_Cities *tree)
     }   
 }
 
+/*! Função que calcula a profundidade da ávore de destinos e retorna esse valor */
+/*! Que significa a quantidade de destinos que essa cidade tem */
 int NumberOfDestinations(Tree_Destination *tree)
 {   
     if (tree == NULL)  
@@ -307,19 +295,4 @@ int NumberOfDestinations(Tree_Destination *tree)
     
     else     
         return(NumberOfDestinations(tree->left) + 1 + NumberOfDestinations(tree->right));   
-} 
-
-
-void Search_Population(Tree_World_Cities *worldTree, unsigned long int id)
-{
-    if (worldTree)
-    {
-        if (worldTree->data.id == id)
-        {
-            printf("\tPopulation: %lu", worldTree->data.population);
-        }
-
-        Search_Population(worldTree->left, id);
-        Search_Population(worldTree->right, id);
-    }
 }
